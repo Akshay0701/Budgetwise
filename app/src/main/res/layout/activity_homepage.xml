@@ -1,0 +1,558 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+
+    <!-- App bar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/light_blue"
+        app:titleTextColor="@android:color/white"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <ImageView
+            android:id="@+id/imageViewMenu"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/menu"
+            android:layout_gravity="start"
+            android:paddingStart="0dp"/>
+
+        <TextView
+            android:id="@+id/textViewMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="April 2024"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/imageViewArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/down"
+            android:layout_gravity="center"
+            android:paddingEnd="0dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="end"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageViewShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/iconshare"
+                android:layout_marginEnd="16dp"/>
+
+            <ImageView
+                android:id="@+id/imageViewOptions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/iconoptions"/>
+
+        </LinearLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="20dp"
+                app:cardCornerRadius="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/remainingTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="$10,320"
+                        android:textColor="@color/light_green"
+                        android:layout_marginTop="10dp"
+                        android:textStyle="bold"
+                        android:textSize="30dp"
+                        android:gravity="center"
+                        ></TextView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Remaining in Budget"
+                        android:textColor="@color/gray"
+                        android:gravity="center"
+                        ></TextView>
+
+                    <ProgressBar
+                        android:id="@+id/progressBarTotalBudget"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="20dp"
+                        android:progressBackgroundTint="@color/light_gray"
+                        android:progressTint="@color/light_green"
+                        android:progressDrawable="@drawable/progress_bar_horizontal"
+                        android:max="10000"
+                        android:progress="0" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Spent: "
+                            android:textColor="@color/gray"
+                            android:gravity="start"
+                            android:layout_marginLeft="20dp"
+                            android:textSize="18dp"
+                            ></TextView>
+                        <TextView
+                            android:id="@+id/totalSpendTxt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="$280,000"
+                            android:textColor="@color/light_black"
+                            android:gravity="start"
+                            android:textSize="20dp"
+                            ></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Budget: "
+                            android:textColor="@color/gray"
+                            android:gravity="end"
+                            android:layout_marginLeft="20dp"
+                            android:textSize="18dp"
+                            ></TextView>
+
+                        <TextView
+                            android:id="@+id/totalBudgetTxt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="$280,000"
+                            android:textColor="@color/light_black"
+                            android:gravity="start"
+                            android:textSize="20dp"
+                            ></TextView>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_marginTop="20dp"
+                        app:dividerColor="@color/light_gray"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"></com.google.android.material.divider.MaterialDivider>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp">
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/food"
+                                android:layout_marginLeft="20dp"
+                                android:layout_height="40dp"></ImageView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Food"
+                                android:layout_marginLeft="15dp"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@color/light_black"
+                                android:gravity="start"
+                                android:textSize="20dp"
+                                ></TextView>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/foodSpendTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$10 of 100"
+                                    android:layout_marginTop="7dp"
+                                    android:layout_marginRight="7dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="16dp"
+                                    ></TextView>
+                                <TextView
+                                    android:id="@+id/foodLeftTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$90 left"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="10dp"
+                                    ></TextView>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <ProgressBar
+                            android:id="@+id/foodProgressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:progressBackgroundTint="@color/light_gray"
+                            android:progressTint="@color/dark_blue"
+                            android:progressDrawable="@drawable/progress_bar_horizontal"
+                            android:max="100"
+                            android:progress="20" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp">
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/shop"
+                                android:layout_marginLeft="20dp"
+                                android:layout_height="40dp"></ImageView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Shopping"
+                                android:layout_marginLeft="15dp"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@color/light_black"
+                                android:gravity="start"
+                                android:textSize="20dp"
+                                ></TextView>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/shopSpendTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$10 of 100"
+                                    android:layout_marginTop="7dp"
+                                    android:layout_marginRight="7dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="16dp"
+                                    ></TextView>
+                                <TextView
+                                    android:id="@+id/shopLeftTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$10 of 100"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="10dp"
+                                    ></TextView>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <ProgressBar
+                            android:id="@+id/shopProgressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:progressBackgroundTint="@color/light_gray"
+                            android:progressTint="@color/mid_blue"
+                            android:progressDrawable="@drawable/progress_bar_horizontal"
+                            android:max="100"
+                            android:progress="20" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp">
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/car"
+                                android:layout_marginLeft="20dp"
+                                android:layout_height="40dp"></ImageView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Transportation"
+                                android:layout_marginLeft="15dp"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@color/light_black"
+                                android:gravity="start"
+                                android:textSize="20dp"
+                                ></TextView>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/transportSpendTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$10 of 100"
+                                    android:layout_marginTop="7dp"
+                                    android:layout_marginRight="7dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="16dp"
+                                    ></TextView>
+                                <TextView
+                                    android:id="@+id/transportLeftTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$10 of 100"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="10dp"
+                                    ></TextView>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <ProgressBar
+                            android:id="@+id/transportProgressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:progressBackgroundTint="@color/light_gray"
+                            android:progressTint="@color/mid_yellow"
+                            android:progressDrawable="@drawable/progress_bar_horizontal"
+                            android:max="100"
+                            android:progress="20" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp">
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/education"
+                                android:layout_marginLeft="20dp"
+                                android:layout_height="40dp"></ImageView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Education"
+                                android:layout_marginLeft="15dp"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@color/light_black"
+                                android:gravity="start"
+                                android:textSize="20dp"
+                                ></TextView>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/educationSpendTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$10 of 100"
+                                    android:layout_marginTop="7dp"
+                                    android:layout_marginRight="7dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="16dp"
+                                    ></TextView>
+                                <TextView
+                                    android:id="@+id/educationLeftTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$10 of 100"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="10dp"
+                                    ></TextView>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <ProgressBar
+                            android:id="@+id/educationProgressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:progressBackgroundTint="@color/light_gray"
+                            android:progressTint="@color/education_color"
+                            android:progressDrawable="@drawable/progress_bar_horizontal"
+                            android:max="100"
+                            android:progress="20" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp">
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/housing"
+                                android:layout_marginLeft="20dp"
+                                android:layout_height="40dp"></ImageView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Housing"
+                                android:layout_marginLeft="15dp"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@color/light_black"
+                                android:gravity="start"
+                                android:textSize="20dp"
+                                ></TextView>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/housingSpendTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$10 of 100"
+                                    android:layout_marginTop="7dp"
+                                    android:layout_marginRight="7dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="16dp"
+                                    ></TextView>
+                                <TextView
+                                    android:id="@+id/housingLeftTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$10 of 100"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_gravity="end"
+                                    android:textColor="@color/light_black"
+                                    android:gravity="end"
+                                    android:textSize="10dp"
+                                    ></TextView>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <ProgressBar
+                            android:id="@+id/housingProgressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:progressBackgroundTint="@color/light_gray"
+                            android:progressTint="@color/red"
+                            android:progressDrawable="@drawable/progress_bar_horizontal"
+                            android:max="100"
+                            android:progress="20" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/fab_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom|end"
+        android:layout_above="@id/bottom_card"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/fab"
+        app:backgroundTint="@color/white"
+        app:elevation="6dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bottom_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:cardElevation="20dp"
+        >
+
+        <!-- Bottom navigation view -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:itemIconTint="@color/gray"
+            app:itemTextAppearanceActive="@color/light_green"
+            app:itemTextColor="@color/gray"
+            app:menu="@menu/bottom_nav" />
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
