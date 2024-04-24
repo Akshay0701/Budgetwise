@@ -1,5 +1,6 @@
 package com.example.budgetwise
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
@@ -15,6 +16,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 class Homepage : AppCompatActivity() {
@@ -27,7 +29,7 @@ class Homepage : AppCompatActivity() {
     var totalBudget: Int = 10000;
     var totalSpendBudget: Int = 0;
 
-    var foodRatio = 0.1
+    var foodRatio = 0.05
     var foodSpend = 0
 
     var shoppingRatio = 0.15
@@ -39,22 +41,35 @@ class Homepage : AppCompatActivity() {
     var educationRatio = 0.2
     var educationSpend = 0
 
+    var groceriesRatio = 0.05
+    var groceriesSpend = 0
+
     var housingRatio = 0.5
     var housingSpend = 0
+
+    val animationDuration = 1000L
 
     // TextViews
     lateinit var totalBudgetTxt: TextView
     lateinit var totalSpendTxt: TextView
     lateinit var remainingTxt: TextView
     lateinit var foodSpendTxt: TextView
+    lateinit var foodOf: TextView
     lateinit var foodLeftTxt: TextView
     lateinit var shopSpendTxt: TextView
+    lateinit var shopOf: TextView
     lateinit var shopLeftTxt: TextView
     lateinit var transportSpendTxt: TextView
+    lateinit var transportOf: TextView
     lateinit var transportLeftTxt: TextView
     lateinit var educationSpendTxt: TextView
+    lateinit var educationOf: TextView
     lateinit var educationLeftTxt: TextView
+    lateinit var groceriesSpendTxt: TextView
+    lateinit var groceriesOf: TextView
+    lateinit var groceriesLeftTxt: TextView
     lateinit var housingSpendTxt: TextView
+    lateinit var housingOf: TextView
     lateinit var housingLeftTxt: TextView
 
     // ProgressBars
@@ -63,6 +78,7 @@ class Homepage : AppCompatActivity() {
     lateinit var shopProgressBar: ProgressBar
     lateinit var transportProgressBar: ProgressBar
     lateinit var educationProgressBar: ProgressBar
+    lateinit var groceriesProgressBar: ProgressBar
     lateinit var housingProgressBar: ProgressBar
 
 
@@ -79,6 +95,7 @@ class Homepage : AppCompatActivity() {
     private val KEY_SHOPPING_SPEND = "shopping_spend"
     private val KEY_TRANSPORTATION_SPEND = "transportation_spend"
     private val KEY_EDUCATION_SPEND = "education_spend"
+    private val KEY_GROCERIES_SPEND = "groceries_spend"
     private val KEY_HOUSING_SPEND = "housing_spend"
 
     // SharedPreferences instance
@@ -98,14 +115,22 @@ class Homepage : AppCompatActivity() {
         totalSpendTxt = findViewById(R.id.totalSpendTxt)
         remainingTxt = findViewById(R.id.remainingTxt)
         foodSpendTxt = findViewById(R.id.foodSpendTxt)
+        foodOf = findViewById(R.id.foodOf)
         foodLeftTxt = findViewById(R.id.foodLeftTxt)
         shopSpendTxt = findViewById(R.id.shopSpendTxt)
+        shopOf = findViewById(R.id.shopOf)
         shopLeftTxt = findViewById(R.id.shopLeftTxt)
         transportSpendTxt = findViewById(R.id.transportSpendTxt)
+        transportOf = findViewById(R.id.transportOf)
         transportLeftTxt = findViewById(R.id.transportLeftTxt)
         educationSpendTxt = findViewById(R.id.educationSpendTxt)
+        educationOf = findViewById(R.id.educationOf)
         educationLeftTxt = findViewById(R.id.educationLeftTxt)
+        groceriesSpendTxt = findViewById(R.id.groceriesSpendTxt)
+        groceriesOf = findViewById(R.id.groceriesOf)
+        groceriesLeftTxt = findViewById(R.id.groceriesLeftTxt)
         housingSpendTxt = findViewById(R.id.housingSpendTxt)
+        housingOf = findViewById(R.id.housingOf)
         housingLeftTxt = findViewById(R.id.housingLeftTxt)
 
         // Initialize ProgressBars
@@ -114,6 +139,7 @@ class Homepage : AppCompatActivity() {
         shopProgressBar = findViewById(R.id.shopProgressBar)
         transportProgressBar = findViewById(R.id.transportProgressBar)
         educationProgressBar = findViewById(R.id.educationProgressBar)
+        groceriesProgressBar = findViewById(R.id.groceriesProgressBar)
         housingProgressBar = findViewById(R.id.housingProgressBar)
 
         // get saved values
@@ -122,6 +148,7 @@ class Homepage : AppCompatActivity() {
         shoppingSpend = prefs.getInt(KEY_SHOPPING_SPEND, 0)
         transportationSpend = prefs.getInt(KEY_TRANSPORTATION_SPEND, 0)
         educationSpend = prefs.getInt(KEY_EDUCATION_SPEND, 0)
+        groceriesSpend = prefs.getInt(KEY_GROCERIES_SPEND, 0)
         housingSpend = prefs.getInt(KEY_HOUSING_SPEND, 0)
 
         // Set text and progress
@@ -130,6 +157,7 @@ class Homepage : AppCompatActivity() {
         updateShoppingCategory(0)
         updateTransportationCategory(0)
         updateEducationCategory(0)
+        updateGroceriesCategory(0)
         updateHousingCategory(0)
 
 
@@ -137,6 +165,8 @@ class Homepage : AppCompatActivity() {
             showDialogBox()
         }
     }
+
+
 
     private fun showDialogBox() {
         // Setting up view for dialog box
@@ -191,6 +221,11 @@ class Homepage : AppCompatActivity() {
                     updateTotalSpend(amount)
                 }
 
+                "Groceries" -> {
+                    updateGroceriesCategory(amount)
+                    updateTotalSpend(amount)
+                }
+
                 "Education" -> {
                     updateEducationCategory(amount)
                     updateTotalSpend(amount)
@@ -206,6 +241,7 @@ class Homepage : AppCompatActivity() {
                 putInt(KEY_SHOPPING_SPEND, shoppingSpend)
                 putInt(KEY_TRANSPORTATION_SPEND, transportationSpend)
                 putInt(KEY_EDUCATION_SPEND, educationSpend)
+                putInt(KEY_GROCERIES_SPEND, groceriesSpend)
                 putInt(KEY_HOUSING_SPEND, housingSpend)
                 apply()
             }
@@ -215,56 +251,164 @@ class Homepage : AppCompatActivity() {
         }
     }
 
+    fun addCommasToNumber(numberString: String): String {
+        val number = numberString.substring(1).toInt() // Remove the dollar sign and convert to int
+        val formatter = DecimalFormat("#,###")
+        return "$${formatter.format(number)}"
+    }
+
     private fun updateTotalSpend(spend: Int) {
+        val oldProgress = totalSpendBudget
+
         totalSpendBudget += spend
-        totalBudgetTxt.text = "$$totalBudget"
-        totalSpendTxt.text = "$$totalSpendBudget"
-        remainingTxt.text = "$${totalBudget - totalSpendBudget}"
-        progressBarTotalBudget.progress = totalSpendBudget
+        totalBudgetTxt.text = addCommasToNumber("$$totalBudget")
+        totalSpendTxt.text = addCommasToNumber("$$totalSpendBudget")
+        remainingTxt.text = addCommasToNumber("$${totalBudget - totalSpendBudget}")
+
+        // Create an ObjectAnimator to animate the progress
+        val animator = ObjectAnimator.ofInt(progressBarTotalBudget, "progress", oldProgress, totalSpendBudget)
+        animator.duration = animationDuration
+        animator.addUpdateListener { animation ->
+            val progress = animation.animatedValue as Int
+            progressBarTotalBudget.progress = progress
+        }
+
+        // Start the animation
+        animator.start()
+    }
+
+    // Function to update the groceries category
+    private fun updateGroceriesCategory(spend: Int) {
+        val oldProgress = groceriesSpend
+
+        groceriesSpend += spend
+        groceriesSpendTxt.text = "$$groceriesSpend"
+        groceriesOf.text = "of ${(totalBudget * groceriesRatio).roundToInt()}"
+        groceriesLeftTxt.text = "$${(totalBudget * groceriesRatio - groceriesSpend).roundToInt()} left"
+        groceriesProgressBar.max = (totalBudget * groceriesRatio).roundToInt()
+
+        // Create an ObjectAnimator to animate the progress
+        val animator = ObjectAnimator.ofInt(groceriesProgressBar, "progress", oldProgress, groceriesSpend)
+        animator.duration = animationDuration
+        animator.addUpdateListener { animation ->
+            val progress = animation.animatedValue as Int
+            groceriesProgressBar.progress = progress
+        }
+
+        // Start the animation
+        animator.start()
     }
 
     // Function to update the food category
     private fun updateFoodCategory(spend: Int) {
+        val oldProgress = foodSpend
+
         foodSpend += spend
-        foodSpendTxt.text = "$$foodSpend of ${(totalBudget * foodRatio).roundToInt()}"
+        foodSpendTxt.text = "$$foodSpend"
+        foodOf.text = "of ${(totalBudget * foodRatio).roundToInt()}"
         foodLeftTxt.text = "$${(totalBudget * foodRatio - foodSpend).roundToInt()} left"
         foodProgressBar.max = (totalBudget * foodRatio).roundToInt()
-        foodProgressBar.progress = foodSpend
+
+
+        // Create an ObjectAnimator to animate the progress
+        val animator = ObjectAnimator.ofInt(foodProgressBar, "progress", oldProgress, foodSpend)
+        animator.duration = animationDuration
+        animator.addUpdateListener { animation ->
+            val progress = animation.animatedValue as Int
+            foodProgressBar.progress = progress
+        }
+
+        // Start the animation
+        animator.start()
     }
 
     // Function to update the shopping category
     private fun updateShoppingCategory(spend: Int) {
+        val oldProgress = shoppingSpend
+
         shoppingSpend += spend
-        shopSpendTxt.text = "$$shoppingSpend of ${(totalBudget * shoppingRatio).roundToInt()}"
+        shopSpendTxt.text = "$$shoppingSpend"
+        shopOf.text = "of ${(totalBudget * shoppingRatio).roundToInt()}"
         shopLeftTxt.text = "$${(totalBudget * shoppingRatio - shoppingSpend).roundToInt()} left"
         shopProgressBar.max = (totalBudget * shoppingRatio).roundToInt()
-        shopProgressBar.progress = shoppingSpend
+
+        // Create an ObjectAnimator to animate the progress
+        val animator = ObjectAnimator.ofInt(shopProgressBar, "progress", oldProgress, shoppingSpend)
+        animator.duration = animationDuration
+        animator.addUpdateListener { animation ->
+            val progress = animation.animatedValue as Int
+            shopProgressBar.progress = progress
+        }
+
+        // Start the animation
+        animator.start()
     }
 
     // Function to update the transportation category
     private fun updateTransportationCategory(spend: Int) {
+        val oldProgress = transportationSpend
+
         transportationSpend += spend
-        transportSpendTxt.text = "$$transportationSpend of ${(totalBudget * transportationRatio).roundToInt()}"
+        transportSpendTxt.text = "$$transportationSpend"
+        transportOf.text = "of ${(totalBudget * transportationRatio).roundToInt()}"
         transportLeftTxt.text = "$${(totalBudget * transportationRatio - transportationSpend).roundToInt()} left"
         transportProgressBar.max = (totalBudget * transportationRatio).roundToInt()
-        transportProgressBar.progress = transportationSpend
+
+
+        // Create an ObjectAnimator to animate the progress
+        val animator = ObjectAnimator.ofInt(transportProgressBar, "progress", oldProgress, transportationSpend)
+        animator.duration = animationDuration
+        animator.addUpdateListener { animation ->
+            val progress = animation.animatedValue as Int
+            transportProgressBar.progress = progress
+        }
+
+        // Start the animation
+        animator.start()
     }
 
     // Function to update the education category
     private fun updateEducationCategory(spend: Int) {
+        val oldProgress = educationSpend
+
         educationSpend += spend
-        educationSpendTxt.text = "$$educationSpend of ${(totalBudget * educationRatio).roundToInt()}"
+        educationSpendTxt.text = "$$educationSpend"
+        educationOf.text = "of ${(totalBudget * educationRatio).roundToInt()}"
         educationLeftTxt.text = "$${(totalBudget * educationRatio - educationSpend).roundToInt()} left"
         educationProgressBar.max = (totalBudget * educationRatio).roundToInt()
-        educationProgressBar.progress = educationSpend
+
+        // Create an ObjectAnimator to animate the progress
+        val animator = ObjectAnimator.ofInt(educationProgressBar, "progress", oldProgress, educationSpend)
+        animator.duration = animationDuration
+        animator.addUpdateListener { animation ->
+            val progress = animation.animatedValue as Int
+            educationProgressBar.progress = progress
+        }
+
+        // Start the animation
+        animator.start()
     }
 
     // Function to update the housing category
     private fun updateHousingCategory(spend: Int) {
+        val oldProgress = housingSpend
+
         housingSpend += spend
-        housingSpendTxt.text = "$$housingSpend of ${(totalBudget * housingRatio).roundToInt()}"
+        housingSpendTxt.text = "$$housingSpend"
+        housingOf.text = "of ${(totalBudget * housingRatio).roundToInt()}"
         housingLeftTxt.text = "$${(totalBudget * housingRatio - housingSpend).roundToInt()} left"
         housingProgressBar.max = (totalBudget * housingRatio).roundToInt()
-        housingProgressBar.progress = housingSpend
+
+
+        // Create an ObjectAnimator to animate the progress
+        val animator = ObjectAnimator.ofInt(housingProgressBar, "progress", oldProgress, housingSpend)
+        animator.duration = animationDuration
+        animator.addUpdateListener { animation ->
+            val progress = animation.animatedValue as Int
+            housingProgressBar.progress = progress
+        }
+
+        // Start the animation
+        animator.start()
     }
 }

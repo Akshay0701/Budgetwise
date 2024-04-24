@@ -7,4 +7,21 @@
     </style>
 
     <style name="Theme.Budgetwise" parent="Base.Theme.Budgetwise" />
+    <style name="BottomNavigationView.Text" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/avenirnextdemipro</item>
+        <item name="android:textColor">@color/light_blue</item>
+    </style>
+
+    <style name="BottomNavigationView.Text.Inactive" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/avenirnextdemipro</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="BottomNavigationView.Custom" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- Adjust the padding between icon and text -->
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
 </resources>

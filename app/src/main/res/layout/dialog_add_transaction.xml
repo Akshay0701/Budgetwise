@@ -41,6 +41,11 @@
             android:layout_height="wrap_content"
             android:text="Shopping"/>
         <RadioButton
+            android:id="@+id/radioButtonGroceries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Groceries"/>
+        <RadioButton
             android:id="@+id/radioButtonTransportation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
